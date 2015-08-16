@@ -1,0 +1,27 @@
+# Maintainer: Forcyy <forcyy.zh AT gmail DOT com>
+pkgname=kdoubanfm
+pkgver=0.3
+pkgrel=2
+pkgdesc="Douban FM Music service in Systray"
+arch=('i686' 'x86_64')
+url="http://kde-apps.org/content/show.php/KDoubanFM?content=151477"
+license=('GPL2')
+depends=('qjson' 'kdebase-runtime')
+makedepends=('cmake' 'gcc' 'qjson' 'automoc4')
+install=$pkgname.install
+
+source=("http://kde-apps.org/CONTENT/content-files/151477-$pkgname-$pkgver.tar.bz2")
+md5sums=('6fcec000fda7a72a4ea6e266365df406')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  mkdir build && cd build
+  cmake -DCMAKE_INSTALL_PREFIX="$(kde4-config --prefix)" ..
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver/build"
+  make DESTDIR="${pkgdir}/" PREFIX="$(kde4-config --prefix)" install
+}
+
